@@ -1,0 +1,97 @@
+{% extends 'admin_base.html' %}{% block content %}
+<main class="page">
+  <section class="section-head page-head">
+    <h1>Ассортимент</h1>
+    <p>Добавление, редактирование, удаление товаров, быстрые флажки и сортировка</p>
+    <a class="btn primary" href="{{ url_for('admin.admin_product_new') }}">Добавить товар</a>
+  </section>
+
+  {% set sort_map = {
+    'id': ['id-asc', 'id-desc'],
+    'name': ['name-asc', 'name-desc'],
+    'price': ['price-asc', 'price-desc'],
+    'quantity': ['quantity-asc', 'quantity-desc'],
+    'discount': ['discount-asc', 'discount-desc'],
+    'new': ['new-first', 'new-last'],
+    'assortment': ['assortment-first', 'assortment-last']
+  } %}
+  {% macro sort_button(label, key) -%}
+    {% set asc = sort_map[key][0] %}
+    {% set desc = sort_map[key][1] %}
+    {% set next_sort = desc if sort == asc else asc %}
+    {% set arrow = '↑' if sort == asc else ('↓' if sort == desc else '↕') %}
+    <a class="sort-btn" href="{{ url_for('admin.admin_products', sort=next_sort) }}" title="Сортировать">{{ label }} {{ arrow }}</a>
+  {%- endmacro %}
+
+  <section class="admin-stats product-mini-stats">
+    <div><b>{{ table_stats.total }}</b><span>товаров всего</span></div>
+    <div><b>{{ table_stats.in_assortment }}</b><span>в ассортименте</span></div>
+    <div><b>{{ table_stats.new }}</b><span>новинок</span></div>
+    <div><b>{{ table_stats.out_of_stock }}</b><span>нет в наличии</span></div>
+  </section>
+
+  <section class="admin-table-wrap">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>{{ sort_button('ID', 'id') }}</th>
+          <th>Фото</th>
+          <th>{{ sort_button('Название', 'name') }}</th>
+          <th>Тип</th>
+          <th>{{ sort_button('Остаток', 'quantity') }}</th>
+          <th>{{ sort_button('Цена', 'price') }}</th>
+          <th>{{ sort_button('Скидка', 'discount') }}</th>
+          <th>{{ sort_button('В ассортименте', 'assortment') }}</th>
+          <th>{{ sort_button('Новинка', 'new') }}</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for p in products %}
+          <tr>
+            <td>{{ p.id }}</td>
+            <td><img class="admin-thumb" src="{{ p.main_image }}" alt="{{ p.name }}"></td>
+            <td>{{ p.name }}</td>
+            <td>{{ p.type }}</td>
+            <td>{{ p.quantity }} шт.</td>
+            <td>{{ p.price }} ₽</td>
+            <td>{{ p.discount }}%</td>
+            <td>
+              <label class="mini-check">
+                <input
+                  type="checkbox"
+                  data-admin-flag
+                  data-product-id="{{ p.id }}"
+                  data-flag="in_assortment"
+                  {% if p.in_assortment %}checked{% endif %}
+                >
+                <span>В ассортименте</span>
+              </label>
+            </td>
+            <td>
+              <label class="mini-check">
+                <input
+                  type="checkbox"
+                  data-admin-flag
+                  data-product-id="{{ p.id }}"
+                  data-flag="is_new"
+                  {% if p.is_new %}checked{% endif %}
+                >
+                <span>Новинка</span>
+              </label>
+            </td>
+            <td class="admin-row-actions">
+              <span class="save-status" data-save-status="{{ p.id }}"></span>
+              <a class="btn small" href="{{ url_for('admin.admin_product_edit', product_id=p.id) }}">Редактировать</a>
+              <form method="post" action="{{ url_for('admin.admin_product_delete', product_id=p.id) }}" onsubmit="return confirm('Удалить товар?')">
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+                <button class="btn small light" type="submit">Удалить</button>
+              </form>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+</main>
+{% endblock %}

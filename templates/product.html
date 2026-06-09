@@ -1,0 +1,45 @@
+{% extends 'base.html' %}{% set title=product.name ~ ' | МармеладШоп43' %}{% block content %}
+<main class="page product-page">
+  <section class="product-detail">
+    <div class="product-gallery">
+      <img class="product-main-img" data-main-product-image src="{{ product.main_image }}" alt="{{ product.name }}">
+      <div class="thumbs">
+        {% for image in product.images %}
+          <button class="thumb {% if loop.first %}active{% endif %}" type="button" data-product-thumb="{{ image }}">
+            <img src="{{ image }}" alt="{{ product.name }} {{ loop.index }}">
+          </button>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="product-info">
+      <p class="label">{{ product.type }}</p>
+      {% if product.is_new %}<span class="badge-new inline">Новинка</span>{% endif %}
+      <h1>{{ product.name }}</h1>
+      <p>{{ product.full_description }}</p>
+      <ul class="specs">
+        <li><b>Состав:</b> {{ product.composition }}</li>
+        <li><b>Вес товара:</b> {{ product.weight }}</li>
+        <li><b>Остаток:</b> {{ product.quantity }} шт.</li>
+      </ul>
+
+      <div class="nutrition-block">
+        <h2>Пищевая ценность продукта на 100г</h2>
+        <table class="nutrition-table">
+          <tbody>
+            <tr><th>Белки</th><td>{{ product.proteins or '—' }}</td></tr>
+            <tr><th>Жиры</th><td>{{ product.fats or '—' }}</td></tr>
+            <tr><th>Углеводы</th><td>{{ product.carbohydrates or '—' }}</td></tr>
+            <tr><th>Ккал</th><td>{{ product.kcal or '—' }}</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="product-buy">
+        <div class="price-box detail-price">
+          {% if product.discount %}<span class="old-price">{{ product.price }} ₽</span><span class="new-price">{{ product.discounted_price }} ₽</span>{% else %}<b>{{ product.price }} ₽</b>{% endif %}
+        </div>
+        {% if product.quantity > 0 %}<button class="btn primary" data-add="{{ product.id }}" data-stock="{{ product.quantity }}">В корзину</button>{% else %}<button class="btn primary" disabled>Нет в наличии</button>{% endif %}
+      </div>
+    </div>
+  </section>
+</main>{% endblock %}

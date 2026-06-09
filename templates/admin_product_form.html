@@ -1,0 +1,97 @@
+{% extends 'admin_base.html' %}
+
+{% block content %}
+<main class="page admin-page">
+  <section class="section-head page-head">
+    <h1>{{ action }} товар</h1>
+    <p>JSON карточка товара обновляется автоматически</p>
+  </section>
+
+  <form class="admin-form" method="post" enctype="multipart/form-data" data-dirty-form><input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+    <div class="form-grid">
+      <label>Название
+        <input name="name" value="{{ product.name }}" required>
+      </label>
+      <label>Тип товара
+        <select name="type" required>
+          {% for c in ['Конфеты','Мармелад','Шоколад','Наборы'] %}
+            <option value="{{ c }}" {% if product.type == c %}selected{% endif %}>{{ c }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <label>Остаток
+        <input name="quantity" type="number" min="0" value="{{ product.quantity }}" required>
+      </label>
+      <label>Цена
+        <input name="price" type="number" min="0" value="{{ product.price }}" required>
+      </label>
+      <label>Скидка, %
+        <input name="discount" type="number" min="0" max="90" value="{{ product.discount or 0 }}" required>
+      </label>
+      <label>Вес товара
+        <input name="weight" value="{{ product.weight }}" required>
+      </label>
+      <label>Белки на 100г
+        <input name="proteins" value="{{ product.proteins }}" required>
+      </label>
+      <label>Жиры на 100г
+        <input name="fats" value="{{ product.fats }}" required>
+      </label>
+      <label>Углеводы на 100г
+        <input name="carbohydrates" value="{{ product.carbohydrates }}" required>
+      </label>
+      <label>Ккал на 100г
+        <input name="kcal" value="{{ product.kcal or product.calories }}" required>
+      </label>
+      <label class="check-label">
+        <input name="in_assortment" type="checkbox" {% if product.in_assortment %}checked{% endif %}>
+        В ассортименте
+      </label>
+      <label class="check-label">
+        <input name="is_new" type="checkbox" {% if product.is_new %}checked{% endif %}>
+        Новинка
+      </label>
+    </div>
+
+    <label>Краткое описание
+      <textarea name="short_description" required>{{ product.short_description }}</textarea>
+    </label>
+    <label>Полное описание
+      <textarea name="full_description" required>{{ product.full_description }}</textarea>
+    </label>
+    <label>Состав
+      <textarea name="composition" required>{{ product.composition }}</textarea>
+    </label>
+    <label>Добавить фото
+      <input name="images" type="file" accept="image/jpeg,image/png,image/webp" multiple data-image-preview-input>
+      <small class="form-hint">Можно выбрать сразу несколько изображений. После сохранения они автоматически появятся на сайте.</small>
+    </label>
+
+    <div class="admin-images-preview" data-image-preview></div>
+
+    {% if product.images %}
+      <h3 class="admin-images-title">Текущие изображения товара</h3>
+      <div class="admin-images">
+        {% for image in product.images %}
+          <div class="admin-image-card">
+            <img src="{{ image }}" alt="">
+            <button
+              class="btn small light"
+              type="submit"
+              formmethod="post"
+              formaction="{{ url_for('admin.admin_product_image_delete', product_id=product.id) }}"
+              name="image"
+              value="{{ image }}"
+            >Удалить фото</button>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <div class="admin-actions admin-form-actions">
+      <button class="btn primary" type="submit">{{ action }}</button>
+      <a class="btn" href="{{ url_for('admin.admin_products') }}">Назад</a>
+    </div>
+  </form>
+</main>
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% set title='МармеладШоп43 | О нас' %}
+
+{% block content %}
+<main class="page">
+  <section class="about-hero">
+    <div>
+      <p class="label">О компании</p>
+      <h1>МармеладШоп43 — магазин сладостей для семьи, праздников и подарков</h1>
+      <p>Мы собираем свежий мармелад, шоколад, конфеты и сладкие наборы от проверенных поставщиков. Каждый день обновляем витрину, следим за качеством и помогаем выбрать вкусный подарок.</p>
+      <p>Наш магазин находится в Кирове, поэтому вы можете оформить заказ на сайте или заглянуть к нам лично за любимыми сладостями.</p>
+    </div>
+    <div class="about-photo">🍭</div>
+  </section>
+
+  <section class="opening-banner"><p class="label">Скоро открытие!</p><h2>Запланировано на декабрь 2026 года!</h2><p>Мы уже готовим сладкую витрину, удобный самовывоз и уютное место для выбора подарков.</p></section>
+
+  <section class="about-info">
+    <div class="contact-card">
+      <p class="label">Адрес</p>
+      <h2>г.Киров, ул.Воровского 31</h2>
+      <p>Приходите за мармеладом, шоколадом, конфетами и подарочными сладкими наборами.</p>
+      <a class="btn primary" href="https://yandex.ru/maps/46/kirov/house/ulitsa_vorovskogo_31/YEAYcABiTUYEQFtifXl4dX1mYg==/?ll=49.672547%2C58.593994&z=19.98" target="_blank" rel="noopener">Открыть в Яндекс Картах</a>
+    </div>
+
+    <div class="map-card">
+      <div id="yandex-map" style="width:100%;height:400px;"></div>
+      <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU"></script>
+      <script>
+        ymaps.ready(function () {
+          var map = new ymaps.Map('yandex-map', {
+            center: [58.593994, 49.672547],
+            zoom: 18
+          });
+
+          var placemark = new ymaps.Placemark(
+            [58.593994, 49.672547],
+            {
+              balloonContent: '<strong>МармеладШоп43</strong><br>Кировская обл., г. Киров<br>ул. Воровского, д. 31',
+              hintContent: 'МармеладШоп43'
+            }
+          );
+
+          map.geoObjects.add(placemark);
+        });
+      </script>
+    </div>
+  </section>
+
+  <section class="photo-grid">
+    <div>🍬</div>
+    <div>🍫</div>
+    <div>🍩</div>
+    <div>🎁</div>
+  </section>
+</main>
+{% endblock %}

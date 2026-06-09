@@ -1,0 +1,29 @@
+{% extends 'base.html' %}{% set title='МармеладШоп43 | Ассортимент' %}{% block content %}
+<main class="page">
+  <section class="section-head page-head">
+    <h1>Ассортимент</h1>
+    <p>Фильтруйте сладости по категории и быстро добавляйте в корзину</p>
+  </section>
+  <form class="filters" method="get" data-auto-filter>
+    <input name="q" type="search" placeholder="Поиск по названию" value="{{ q }}">
+    <select name="category">
+      <option value="all">Все категории</option>
+      {% for c in ['Конфеты','Мармелад','Шоколад','Наборы'] %}
+        <option value="{{ c }}" {% if category==c %}selected{% endif %}>{{ c }}</option>
+      {% endfor %}
+    </select>
+    <select name="sort">
+      <option value="default">По умолчанию</option>
+      <option value="price-asc" {% if sort=='price-asc' %}selected{% endif %}>Сначала дешевле</option>
+      <option value="price-desc" {% if sort=='price-desc' %}selected{% endif %}>Сначала дороже</option>
+    </select>
+    <a class="btn light reset-filters" href="{{ url_for('public.catalog') }}">Сбросить фильтры</a>
+  </form>
+  <section class="products-grid catalog-grid">
+    {% for product in products %}
+      {% include 'parts/product_card.html' %}
+    {% else %}
+      <p class="empty">Товары не найдены</p>
+    {% endfor %}
+  </section>
+</main>{% endblock %}

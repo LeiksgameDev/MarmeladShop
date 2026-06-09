@@ -1,0 +1,3 @@
+{% extends 'admin_base.html' %}{% block content %}
+<main class="page"><section class="section-head page-head"><h1>{{ action }} поставщика</h1></section><form class="admin-form" method="post"><input type="hidden" name="_csrf_token" value="{{ csrf_token() }}"><label>Наименование<input name="name" value="{{ supplier.name if supplier else '' }}" required></label><label>Почта<input name="email" type="email" value="{{ supplier.email if supplier else '' }}" required></label><div class="admin-actions"><button class="btn primary" type="submit">{{ action }}</button><a class="btn" href="{{ url_for('admin.admin_suppliers') }}">Назад</a></div></form></main>
+{% endblock %}

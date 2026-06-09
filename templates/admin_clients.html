@@ -1,0 +1,3 @@
+{% extends 'admin_base.html' %}{% block content %}
+<main class="page"><section class="section-head page-head"><h1>Клиенты</h1><p>Просмотр ФИО, телефона и почты зарегистрированных клиентов</p></section><section class="admin-table-wrap"><table class="admin-table"><thead><tr><th>ID</th><th>ФИО</th><th>Телефон</th><th>Почта</th><th>Дата регистрации</th></tr></thead><tbody>{% for c in clients %}<tr><td>{{ c.id }}</td><td>{{ c.name }}</td><td>{{ c.phone }}</td><td>{{ c.email }}</td><td>{{ c.created_at }}</td></tr>{% endfor %}</tbody></table></section></main>
+{% endblock %}
